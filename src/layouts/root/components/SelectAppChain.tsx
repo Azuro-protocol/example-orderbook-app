@@ -8,9 +8,9 @@ import { useBaseBetslip, useChain } from '@azuro-org/sdk'
 import { type ChainId } from '@azuro-org/toolkit'
 import { use, useCallback } from 'react'
 import type { DropdownIndicatorProps, OptionProps } from 'react-select'
-import { chiliz, gnosis, polygon, polygonAmoy, spicy } from 'viem/chains'
+import { bscTestnet } from 'viem/chains'
 
-const CHAINS = [polygonAmoy, gnosis, polygon, chiliz, spicy] as const
+const CHAINS = [bscTestnet] as const
 
 const chainOptions = CHAINS.map((chain) => ({
   value: chain.id,

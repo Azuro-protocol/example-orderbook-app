@@ -1,5 +1,6 @@
 'use client'
 import { OutComeData } from '@/hooks'
+import type { BscGame, BscNavigationSport } from '@/services/bscMarketManager'
 import { DefaultBetRanges, TCategory } from '@/types'
 import { SportHub } from '@azuro-org/sdk'
 import { MarketOutcome, SportsNavigationQuery, GamesQuery } from '@azuro-org/toolkit'
@@ -10,11 +11,12 @@ export type ExploreContextValue = {
   sportSlug: string
   sportsLoading: boolean
   gamesLoading: boolean
-  games: GamesQuery['games'] | undefined
-  sports: SportsNavigationQuery['sports'] | undefined
+  games: GamesQuery['games'] | BscGame[] | undefined
+  sports: SportsNavigationQuery['sports'] | BscNavigationSport[] | undefined
   categories: TCategory[]
   searching: string
   bets: OutComeData
+  allBets: OutComeData
   betRange: DefaultBetRanges
   setBets: Dispatch<SetStateAction<OutComeData>>
   setBetRange: Dispatch<SetStateAction<DefaultBetRanges>>
@@ -37,6 +39,7 @@ export const ExploreContext = createContext<ExploreContextValue>({
   categories: [],
   searching: '',
   bets: {},
+  allBets: {},
   betRange: 'Single',
   filterSports: () => null,
   setBets: () => null,

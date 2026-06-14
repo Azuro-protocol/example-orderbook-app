@@ -1,9 +1,9 @@
 'use client'
 import { ExploreContext } from '@/contexts'
-import { OutComeData, useLocalStorage } from '@/hooks'
-import { DefaultBetRanges, TGame } from '@/types'
+import { OutComeData, useBscGames, useBscNavigation, useLocalStorage } from '@/hooks'
+import { DefaultBetRanges } from '@/types'
 import { groupBetByBetRange, sortBet } from '@/utils'
-import { SportHub, useGames, useSportsNavigation } from '@azuro-org/sdk'
+import { SportHub } from '@azuro-org/sdk'
 import { MarketOutcome } from '@azuro-org/toolkit'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
@@ -16,19 +16,12 @@ export const ExploreProvider: React.FC<ExploreProviderProps> = ({
 }) => {
   const [sportHub, setSportHub] = useState<SportHub>(SportHub.Sports)
   const [sportSlug, setSportSlug] = useState('')
-  const { sports, loading: sportsLoading } = useSportsNavigation({
-    withGameCount: true,
-    filter: {
-      sportHub,
-    }
-  })
-  const { games: _games, loading: gamesLoading } = useGames({
-    filter: {
-      sportHub,
-      sportSlug,
-    }
-  })
   const [ searching, setSearching ] = useState<string>('')
+  const { data: sports, isLoading: sportsLoading } = useBscNavigation()
+  const { data: games, isLoading: gamesLoading } = useBscGames(
+    sportSlug,
+    searching
+  )
   const [ outcomeSelected, setOutcomeSelected ] = useState<MarketOutcome | null>(
     null
   )
@@ -54,17 +47,6 @@ export const ExploreProvider: React.FC<ExploreProviderProps> = ({
     const result = groupBetByBetRange({ ...bets }, betRange)
     setGroupedBets(result as OutComeData)
   }, [ betRange, bets ])
-
-  const games = useMemo(() => {
-    if (!searching || !_games?.length) {
-      return _games
-    }
-
-    return _games?.filter((game: TGame) => {
-      const regex = new RegExp(searching, 'i')
-      return regex.test(game?.title!)
-    })
-  }, [ _games, searching ])
 
   const value = useMemo(
     () => ({

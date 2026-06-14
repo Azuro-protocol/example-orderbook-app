@@ -12,6 +12,15 @@ type ButtonProps = {
   onClick: () => void
 }
 
+function getSportGameCount(sport): number {
+  return (
+    sport.games?.length ??
+    sport.activePrematchGamesCount ??
+    sport.activeGamesCount ??
+    0
+  )
+}
+
 const Button: React.FC<ButtonProps> = (props) => {
   const { sportId, title, count, isSelected, onClick } = props
 
@@ -57,7 +66,7 @@ export default function AllSportsTag() {
       return 0
     }
 
-    return sports.reduce((acc, { games }) => acc + games?.length!, 0)
+    return sports.reduce((acc, sport) => acc + getSportGameCount(sport), 0)
   }, [ sports ])
 
   return (
@@ -80,7 +89,8 @@ export default function AllSportsTag() {
           onClick={() => handleClick('')}
         />
         {
-          sports?.map(({ sportId, name, games, slug }) => {
+          sports?.map((sport) => {
+            const { sportId, name, slug } = sport
             const isSelected = sportSlug === slug
 
             return (
@@ -88,7 +98,7 @@ export default function AllSportsTag() {
                 key={sportId} 
                 sportId={sportId} 
                 title={name} 
-                count={games?.length!} 
+                count={getSportGameCount(sport)}
                 isSelected={isSelected}
                 onClick={() => handleClick(slug)}
               />

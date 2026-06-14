@@ -6,7 +6,7 @@ export const NoData = () => {
   const { sportSlug, sports, searching } = use(ExploreContext)
 
   const sportName = useMemo(
-    () => sports!.find((sport) => sport.slug === sportSlug)?.name,
+    () => sports?.find((sport) => sport.slug === sportSlug)?.name,
     [sportSlug, sports]
   )
 

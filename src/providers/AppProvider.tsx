@@ -31,7 +31,7 @@ export default function AppProvider(props: Readonly<AppProvidersProps>) {
       <QueryClientProvider client={queryClient}>
         <RainbowKitProvider>
           <AzuroSDKProvider
-            initialChainId={chainId}
+            initialChainId={chainId as never}
             isBatchBetWithSameGameEnabled
           >
             <ApolloProvider>
